@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Orders</title>
+
+    <!-- Bootstrap Links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Create New Order</h1>
+
+        <form action="/order/create " method="post">
+
+            <div class="form-group">
+
+                <select class="selectpicker form-control" name="creator_id" data-width="75%">
+                <!-- creator_id - name tied to request.form, name of the foreign key from the orders field.. -->
+                {% for user in all_users %}
+                <!-- all_users - coming from the /order/new route -->
+                    <option value="{{user.id}}">{{user.first_name}}</option>
+                    <!-- value="user.id' - value that the user chooses from the iteration of the for loop. -->
+                {% endfor %}
+
+                
+            </select>
+            <label for="type">Cookie Type</label>
+            <input type="text" name="type">
+            <label for="box_quantity">How Many?</label>
+            <input type="number" name="box_quantity">
+            <button>Submit</button>
+        </div>
+        
+        
+
+
+
+        </form>
+
+
+
+
+
+    </div>
+</body>
