@@ -35,3 +35,39 @@ class Order:
         for order_dictionary in results:
             output.append(cls(order_dictionary))
         return output
+    
+    @classmethod
+    def delete(cls, data):
+        query = """
+        DELETE FROM orders
+        WHERE id = %(id)s;
+        """
+        results = connectToMySQL(mydb).query_db(query, data)
+
+    @classmethod
+    def get_by_id(cls, data):
+        query = """
+        SELECT *
+        FROM orders
+        WHERE id = %(id)s;
+        """
+        results = connectToMySQL(mydb).query_db(query, data)
+        return cls(results[0])
+        #return the specific id to show on the edit form.
+
+    @staticmethod
+    # @staticmethod - used for validations
+    def validate_order(order_data):
+    # order_data - information coming from the form.
+        is_valid = True
+        # print(order_data['type'])
+        # print to check info from key. Needs to be called in orders_controller.
+        if len(order_data['type']) < 1:
+            is_valid = False
+
+        return is_valid
+        # return to show validate is still true.
+        
+        # Accesing the 'key' attributes from the order_data. 
+        
+

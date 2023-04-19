@@ -52,8 +52,8 @@
                         <td class="tableData">{{order.box_quantity}}</td>
                         <td class="tableData">{{order.created_at.strftime(dtf)}}</td>
                         <td class="tableData">
-                            <a href="/cookies/edit{{order.id}}">Edit</a> |
-                            <a href="/cookies/delete{{order.id}}">Cancel</a>
+                            <a href="/cookies/edit/{{order.id}}">Edit</a> |
+                            <a href="/cookies/delete/{{order.id}}">Cancel</a>
                         </td>
                     </tr>
                     {% endfor %}

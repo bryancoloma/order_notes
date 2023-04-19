@@ -1,8 +1,6 @@
 from flask_app import app
 from flask import render_template, request, redirect, session
 from flask_app.models import order, user
-
-# dateFormat = "%#m/%#d/%Y %I:%M %p"
 dateFormat = "%#m/%#d/%Y %I:%M %p"
 
 @app.route('/')
@@ -21,5 +19,26 @@ def new_order():
 @app.route('/order/create', methods = ['post'])
 def create_order():
     print(request.form)
-    order.Order.save(request.form)
-    return redirect ('/cookies')
+    if order.Order.validate_order(request.form):
+    # validate order - if this renders true, save.
+    # request.form - order_data argument being passed from.
+        order.Order.save(request.form)
+        # if 'is_valid' = True, save info.
+        return redirect ('/cookies')
+    return redirect('/order/new')
+    # if 'is_valid' != true redirect back to order/new
+
+@app.route('/cookies/delete/<int:order_id>')
+def delete_order(order_id):
+    order.Order.delete({'id':order_id})
+    return redirect('/cookies')
+
+@app.route('/cookies/edit/<int:order_id>')
+def edit_order(order_id):
+    return render_template('edit.html', order = order.Order.get_by_id({'id':order_id}))
+
+@app.route('/order/update', methods=['POST'])
+def update_order():
+    print(request.form)
+    
+    return redirect('/cookies')
