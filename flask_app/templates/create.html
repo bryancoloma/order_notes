@@ -18,6 +18,15 @@
         <h1>Create New Order</h1>
 
         <form action="/order/create " method="post">
+            
+            <!-- Display flash message on template/html -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p>{{message}}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
             <div class="form-group">
 

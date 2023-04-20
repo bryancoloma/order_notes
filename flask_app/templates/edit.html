@@ -25,7 +25,17 @@
 </nav>
 <div>
     <h1>The Form</h1>
-    <form action="/order/update" method = 'post'>
+    <form action="/order/update/{{order.id}}" method = 'post'>
+
+        <!-- Display flash message on template/html -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{message}}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <label for="type">Cookie Type</label>
         <input type="text" name="type" value="{{order.type}}">
         <!-- {{order.type}} - Jinja from edit_order route, using the order attributes.-->

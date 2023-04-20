@@ -1,4 +1,5 @@
 from flask_app.config.mysqlconnection import connectToMySQL
+from flask import flash
 
 mydb = "orders"
 
@@ -58,16 +59,34 @@ class Order:
     @staticmethod
     # @staticmethod - used for validations
     def validate_order(order_data):
-    # order_data - information coming from the form.
+    # order_data - information coming from the form/request.form.
         is_valid = True
         # print(order_data['type'])
-        # print to check info from key. Needs to be called in orders_controller.
+        # print to check/test info from key. Needs to be called in orders_controller.
         if len(order_data['type']) < 1:
             is_valid = False
-
+            flash ('Cookie type is required.')
+            #message when cookie type is less than 1 character.
+        elif len(order_data['type'])< 2:
+            is_valid = False
+            flash ('Cookie type must be atleast 2 characters')
+        if len(order_data['box_quantity']) < 1:
+            is_valid = False
+            flash ('Quantity Required')
+        elif int(order_data['box_quantity']) <= 0:
+            is_valid = False
+            flash ('Quantity must be atleast 1.')
         return is_valid
         # return to show validate is still true.
-        
-        # Accesing the 'key' attributes from the order_data. 
-        
 
+    @classmethod
+    def update(cls, data):
+        query = """
+        UPDATE orders
+        SET 
+        type = %(type)s,
+        box_quantity = %(box_quantity)s
+        WHERE id =%(id)s;
+        """
+        #SET = column name equals variable name from request.form
+        results = connectToMySQL(mydb).query_db(query, data)

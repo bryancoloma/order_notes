@@ -37,8 +37,18 @@ def delete_order(order_id):
 def edit_order(order_id):
     return render_template('edit.html', order = order.Order.get_by_id({'id':order_id}))
 
-@app.route('/order/update', methods=['POST'])
-def update_order():
+@app.route('/order/update/<int:order_id>', methods=['POST'])
+def update_order(order_id):
     print(request.form)
-    
-    return redirect('/cookies')
+    if order.Order.validate_order(request.form):
+        data = {
+            'type' : request.form['type'],
+            'box_quantity' : request.form['box_quantity'],
+            'id' : order_id
+        }
+        # Getting the ID from the order_id (URL) to request.form.
+        order.Order.update(data)
+        # data - data dictionary.
+        return redirect('/cookies')
+    return redirect(f'/cookies/edit/{order_id}')
+    # Use f-string on string variables inside a string. 
