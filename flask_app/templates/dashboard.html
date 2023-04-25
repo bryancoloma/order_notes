@@ -46,7 +46,7 @@
                 <tbody class="table-group-divider">
                     {% for order in all_orders %}
                     <tr>
-                        <td class="tableData">#</td>
+                        <td class="tableData"><a href="/user/show/{{order.creator.id}}">{{order.creator.first_name}} {{order.creator.last_name}}</a></td>
                         <td class="tableData">{{order.type}}</td>
                         <td class="tableData">{{order.box_quantity}}</td>
                         <td class="tableData">{{order.created_at.strftime(dtf)}}</td>
@@ -60,7 +60,7 @@
 
             </table>
 
-        </div>
+        </div> 
 
     </div>
 </body>

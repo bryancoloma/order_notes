@@ -1,16 +1,13 @@
 from flask_app import app
 from flask import render_template, request, redirect, session
 from flask_app.models import order, user
-dateFormat = "%#m/%#d/%Y %I:%M %p"
-
-@app.route('/')
-def index():
-    return redirect('/cookies')
-    #goes to cookies route.
+dateFormat = "%-m/%-d/%Y %I:%M %p"
 
 @app.route('/cookies')
 def dashboard():
-    return render_template('dashboard.html', all_orders = order.Order.get_all(), dtf = dateFormat)
+    # return render_template('dashboard.html', all_orders = order.Order.get_all(), dtf = dateFormat) - using get_all method
+    return render_template('dashboard.html', all_orders = order.Order.get_all_join_creator(), dtf = dateFormat) #using get_all_join_creator method.
+
 
 @app.route('/order/new')
 def new_order():
@@ -52,3 +49,9 @@ def update_order(order_id):
         return redirect('/cookies')
     return redirect(f'/cookies/edit/{order_id}')
     # Use f-string on string variables inside a string. 
+
+@app.route('/user/show/<int:user_id>')
+def show_user(user_id):
+    return render_template('show.html', user = user.User.get_by_id({'id' : user_id}))
+    #'id' - coming from the get_by_id WHERE %(id)s.
+    # user_id - coming from show_user parameter.
