@@ -1,5 +1,5 @@
 from flask_app import app
-from flask import render_template, request, redirect, session
+from flask import render_template, request, redirect, session, flash
 from flask_app.models import order, user
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
@@ -31,12 +31,29 @@ def reg():
         return redirect('/cookies')
     return redirect('/')
 
-@app.route('/login', methods = ['POST'])
-def login():
-    pass
-    return redirect('/')
-
 #* 
 #! test
 #TODO
 #? 
+
+@app.route('/login', methods = ['POST'])
+def login():
+    this_user = user.User.get_by_email(request.form)
+    print(this_user)
+    if this_user:
+        if bcrypt.check_password_hash(this_user.password, request.form['password']):
+        # if user is in the db check password is hashed.
+        # this_user variable is a class object form user.py. It has a password attribute.
+        # password - is the hashed password.
+        # request.form['password] is from index.html name = password.
+            session['user_id'] = this_user.id
+            return redirect('/cookies')
+            #if password is correct, save user id to session and redirect to cookies
+    flash('Invlaid Credentials', 'loginError')
+    #else flash error
+    return redirect('/')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')

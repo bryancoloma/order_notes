@@ -34,9 +34,9 @@ class User:
     def save(cls, data):
         query = """
         INSERT INTO users
-        (first_name, last_name, email, password, birthday)
+        (first_name, last_name, email, password)
         VALUES
-        (%(first_name)s, %(last_name)s, %(email)s, %(password)s, %(birthday)s)
+        (%(first_name)s, %(last_name)s, %(email)s, %(password)s)
         """
         results = connectToMySQL(mydb).query_db(query, data)
         #data - represents request.form and is used to pass in to the connectToMySQL method call. Only used when query has a variable.
@@ -86,21 +86,40 @@ class User:
             is_valid = False
             flash ('First Name Name is required', 'regError')
             # regError - key to add to html category to specifically populate error on one side (on registration or login side only)
-        if  len(request['last_name'])< 1:
+        if  len(request['last_name'])< 1:  
             is_valid = False
             flash ('Last Name is required', 'regError')
         if len(request['email']) < 1:
             is_valid = False
             flash ('Email is required', 'regError')
-        # elif not EMAIL_REGEX.match(request['email']): 
+        elif not EMAIL_REGEX.match(request['email']): 
         # to check if email is valid.
         # EMAIL_REGEX - coming from the module.
-            # is_valid = False
-            # flash ('Invalid Email', 'regError')
+            is_valid = False
+            flash ('Invalid Email.', 'regError')
         if len(request['password']) < 1:
             is_valid = False
-            flash ('Password is required', 'regError')
+            flash ('Password is required.', 'regError')
+        elif request['password'] != request['confirm_password']:
+        # to confirm if password confiramtion matches password.
+            is_valid = False
+            flash ('Passwords must match.', 'regError')
+        if User.get_by_email(request)
+        # to check if email is already in db
+            is_valid = False
+            flash ('Choose another email.', 'regError')
+            print('email validation')
         return is_valid
         # return to show validate is still true.
 
-        # lower case and upper case and 0-9
+    @classmethod
+    def get_by_email(cls, data):
+        query = """
+        SELECT *
+        FROM users
+        WHERE email = %(email)s;
+        """
+        result = connectToMySQL(mydb).query_db(query, data)
+        if len(result) <1:
+            return False
+        return cls(result[0])

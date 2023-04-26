@@ -5,9 +5,12 @@ dateFormat = "%-m/%-d/%Y %I:%M %p"
 
 @app.route('/cookies')
 def dashboard():
-    # return render_template('dashboard.html', all_orders = order.Order.get_all(), dtf = dateFormat) - using get_all method
-    return render_template('dashboard.html', all_orders = order.Order.get_all_join_creator(), dtf = dateFormat) #using get_all_join_creator method.
-
+    if 'user_id' in session:
+    # add session check to avoid users in going straight to dashboard/landing page.
+        # return render_template('dashboard.html', all_orders = order.Order.get_all(), dtf = dateFormat) - using get_all method
+        return render_template('dashboard.html', all_orders = order.Order.get_all_join_creator(), dtf = dateFormat) #using get_all_join_creator method.
+    return redirect ('/')
+    # redirects back to login page.
 
 @app.route('/order/new')
 def new_order():
